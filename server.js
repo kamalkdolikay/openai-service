@@ -15,7 +15,7 @@ app.use("/api/openai", verifyJWT, openaiRoutes);
 export default app;
 
 // Local mode (only if run directly)
-if (process.env.VERCEL !== "1") {
+if (!process.env.VERCEL) {
   const port = process.env.PORT || 4000;
   app.listen(port, () => {
     console.log(`OpenAI service running locally on port ${port}`);
