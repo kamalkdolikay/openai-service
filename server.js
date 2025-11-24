@@ -7,20 +7,23 @@ import openaiRoutes from "./routes/openai.js";
 dotenv.config();
 
 const app = express();
-app.use(express.json());
+app.use(express.json({ limit: "50mb" })); // Important for large audio
 
 // Enable CORS for all origins
 app.use(cors({
-  origin: "*",            // allow any origin
-  methods: ["GET","POST"],
-  allowedHeaders: ["Content-Type","Authorization"],
-  credentials: true       // allow cookies (optional)
+  origin: "*",             // allow any origin
+  methods: ["GET", "POST"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true,       // allow cookies (optional)
 }));
 
 // Secure OpenAI routes
 app.use("/api/openai", verifyJWT, openaiRoutes);
 
 // Export for Vercel
+// Health check
+app.get("/health", (req, res) => res.json({ status: "OK" }));
+
 export default app;
 
 // Local mode (only if run directly)
